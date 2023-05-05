@@ -2,6 +2,10 @@
 
 Frontend and backend code for a food voting app where users can vote on their favorite food and where they want to go with their friends that night.
 
+## Status
+
+Build & Tests: ![Run Tests](https://github.com/awhipp/food-votes/actions/workflows/run-tests.yml/badge.svg)](https://github.com/awhipp/food-votes/actions/workflows/run-tests.yml)
+
 ## Backend API Code
 
 * Serverless Lambda
