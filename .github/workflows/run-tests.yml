@@ -16,13 +16,13 @@ jobs:
 
       - name: Test Build
         run: |
-        cd backend
-        go build -o deploy/main main.go 
+          cd backend \
+            go build -o deploy/main main.go 
 
 
       - name: Run Tests
         env:
           FOURSQUARE_API_KEY: ${{ secrets.FOURSQUARE_API_KEY }}
         run: |
-        cd ./backend
-        go test -v
+          cd ./backend \
+            go test -v
