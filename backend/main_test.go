@@ -7,14 +7,10 @@ import (
 
 func TestMain(t *testing.T) {
 	body, _ := HandleLambdaEvent(structs.Event{
-		RawPath: "/getLocal",
-		Headers: struct {
-			XForwardedFor string `json:"x-forwarded-for"`
-			Origin        string `json:"origin"`
-		}{"abc", "def"},
+		RawPath: "/search",
 		QueryStringParameters: struct {
 			Zipcode string `json:"zipcode"`
-		}{"20148"},
+		}{"20001"},
 	})
 
 	if len(body.Results) == 0 {

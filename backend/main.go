@@ -1,8 +1,8 @@
 package main
 
 import (
-	"food-votes/api/getLocal"
-	"food-votes/structs"
+	search "food-votes/api/search"
+	structs "food-votes/structs"
 
 	"fmt"
 	"log"
@@ -27,13 +27,24 @@ func HandleLambdaEvent(event structs.Event) (structs.Response, error) {
 		println("Environment set.")
 	}
 
-	if event.RawPath == "/getLocal" {
-		body := getLocal.Request(event.QueryStringParameters.Zipcode)
+	switch path := event.RawPath; path {
+	case "/search":
+		body := search.Request(event.QueryStringParameters.Zipcode)
 		fmt.Println("Returning a Response with ", len(body.Results), " results.")
-		return body, nil
+		return body, nil // TODO Return Room ID as well
+	case "/join":
+		// Unimplemented
+		fmt.Println("Unimplemented. Will join an existing room id with existing votes for each location.")
+		return structs.Response{}, nil
+	case "/vote":
+		// Unimplemented
+		fmt.Println("Unimplemented. Will add a vote to a location in a room id.")
+		return structs.Response{}, nil
+	default:
+		fmt.Printf("%s.\n", path)
+		return structs.Response{}, nil
 	}
 
-	return structs.Response{}, nil
 }
 
 func main() {

@@ -18,19 +18,15 @@ Frontend and backend code for a food voting app where users can vote on their fa
 
 ### Functions
 
-#### Get Local
+#### Search
 
-Gets the local restaurants from Foursquare API
+Gets the local restaurants from Foursquare API for a given location or zipcode
 
-#### Create Room
+#### Join 
 
-Creates a voting room
+Joins a Room in Progress
 
-#### Get Votes
-
-Gets the votes for a given voting room
-
-#### Add Votes
+#### Vote
 
 Adds votes to a given voting room
 
