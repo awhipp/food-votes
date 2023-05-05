@@ -4,7 +4,7 @@ Frontend and backend code for a food voting app where users can vote on their fa
 
 ## Status
 
-Build & Tests: ![Run Tests](https://github.com/awhipp/food-votes/actions/workflows/run-tests.yml/badge.svg)](https://github.com/awhipp/food-votes/actions/workflows/run-tests.yml)
+[![Tests](https://github.com/awhipp/food-votes/actions/workflows/tests.yml/badge.svg)](https://github.com/awhipp/food-votes/actions/workflows/tests.yml)
 
 ## Backend API Code
 
