@@ -1,6 +1,7 @@
 package main
 
 import (
+	room_mgr "food-votes/api/roommanager"
 	search "food-votes/api/search"
 	structs "food-votes/structs"
 
@@ -12,7 +13,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
-func HandleLambdaEvent(event structs.Event) (structs.Response, error) {
+func HandleLambdaEvent(event structs.Event) (structs.Room, error) {
 	fmt.Println("Event received: ", event)
 
 	// Load environment variable from .env if not set
@@ -29,20 +30,34 @@ func HandleLambdaEvent(event structs.Event) (structs.Response, error) {
 
 	switch path := event.RawPath; path {
 	case "/search":
-		body := search.Request(event.QueryStringParameters.Zipcode)
-		fmt.Println("Returning a Response with ", len(body.Results), " results.")
-		return body, nil // TODO Return Room ID as well
+		body := search.Request(event.QueryStringParameters.Query)
+
+		options := []structs.Option{}
+
+		// Loop through Results and add them to Options
+		for _, result := range body.Results {
+			options = append(options, structs.Option{
+				Name:  result.Name,
+				Votes: 0,
+			})
+		}
+
+		// Create a Room with the Options
+		room := room_mgr.Create(options)
+		fmt.Println("Returning a Response with ", len(room.Options), " results.")
+		return room, nil
 	case "/join":
-		// Unimplemented
-		fmt.Println("Unimplemented. Will join an existing room id with existing votes for each location.")
-		return structs.Response{}, nil
+		ID := event.QueryStringParameters.Query
+		room := room_mgr.Join(ID)
+		fmt.Println("Returning a Response with ", len(room.Options), " results.")
+		return room, nil
 	case "/vote":
 		// Unimplemented
 		fmt.Println("Unimplemented. Will add a vote to a location in a room id.")
-		return structs.Response{}, nil
+		return structs.Room{}, nil
 	default:
 		fmt.Printf("%s.\n", path)
-		return structs.Response{}, nil
+		return structs.Room{}, nil
 	}
 
 }

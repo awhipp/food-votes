@@ -7,7 +7,7 @@ type Event struct {
 		Origin        string `json:"origin"`
 	} `json:"headers"`
 	QueryStringParameters struct {
-		Zipcode string `json:"zipcode"`
+		Query string `json:"query"`
 	} `json:"queryStringParameters"`
 }
 
@@ -59,4 +59,14 @@ type Response struct {
 		} `json:"related_places"`
 		Timezone string `json:"timezone"`
 	} `json:"results"`
+}
+
+type Room struct {
+	ID      string   `json:"id"`
+	Options []Option `json:"options"`
+}
+
+type Option struct {
+	Name  string `json:"name"`
+	Votes int    `json:"votes"`
 }

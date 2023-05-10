@@ -1,4 +1,4 @@
-package getLocal
+package search
 
 import (
 	"food-votes/structs"
