@@ -19,10 +19,11 @@ jobs:
           cd backend
           go build -o deploy/main main.go 
 
-
       - name: Run Tests
         env:
           FOURSQUARE_API_KEY: ${{ secrets.FOURSQUARE_API_KEY }}
+          REDIS_URL: ${{ secrets.REDIS_URL }}
+          REDIS_PW: ${{ secrets.REDIS_PW }}
         run: |
           cd ./backend
           go test -v
