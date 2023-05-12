@@ -67,6 +67,7 @@ type Room struct {
 }
 
 type Option struct {
-	Name  string `json:"name"`
-	Votes int    `json:"votes"`
+	Name    string `json:"name"`
+	Address string `json:"address"`
+	Votes   int    `json:"votes"`
 }

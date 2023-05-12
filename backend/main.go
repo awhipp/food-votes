@@ -4,6 +4,7 @@ import (
 	room_mgr "food-votes/api/roommanager"
 	search "food-votes/api/search"
 	structs "food-votes/structs"
+	"strings"
 
 	"fmt"
 	"log"
@@ -37,8 +38,9 @@ func HandleLambdaEvent(event structs.Event) (structs.Room, error) {
 		// Loop through Results and add them to Options
 		for _, result := range body.Results {
 			options = append(options, structs.Option{
-				Name:  result.Name,
-				Votes: 0,
+				Name:    result.Name,
+				Address: result.Location.Address + ", " + result.Location.Locality + ", " + result.Location.Region + " " + result.Location.Postcode + ", " + result.Location.Country,
+				Votes:   0,
 			})
 		}
 
@@ -52,9 +54,11 @@ func HandleLambdaEvent(event structs.Event) (structs.Room, error) {
 		fmt.Println("Returning a Response with ", len(room.Options), " results.")
 		return room, nil
 	case "/vote":
-		// Unimplemented
-		fmt.Println("Unimplemented. Will add a vote to a location in a room id.")
-		return structs.Room{}, nil
+		Query := event.QueryStringParameters.Query
+		ID := strings.Split(Query, ":")[0]
+		Name := strings.Split(Query, ":")[1]
+		room := room_mgr.Vote(ID, Name)
+		return room, nil
 	default:
 		fmt.Printf("%s.\n", path)
 		return structs.Room{}, nil

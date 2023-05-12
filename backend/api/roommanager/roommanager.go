@@ -2,7 +2,6 @@ package roommanager
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 	"time"
 
@@ -25,7 +24,7 @@ func Create(options []structs.Option) structs.Room {
 	})
 
 	// Random ID for the room
-	ID := uuid.NewString()
+	ID := uuid.NewString()[0:8]
 	room := structs.Room{
 		ID:      ID,
 		Options: options,
@@ -54,8 +53,6 @@ func Create(options []structs.Option) structs.Room {
 	if err != nil {
 		panic(err)
 	}
-
-	fmt.Println(newRoom)
 
 	// Close the connection when done
 	err = client.Close()
@@ -98,4 +95,46 @@ func Join(ID string) structs.Room {
 	}
 
 	return newRoom
+}
+
+func Update(ID string, room structs.Room) structs.Room {
+
+	URL := os.Getenv("REDIS_URL")
+	PW := os.Getenv("REDIS_PW")
+
+	// Connect to Redis
+	client := redis.NewClient(&redis.Options{
+		Addr:     URL,
+		Password: PW,
+		DB:       0, // use default DB
+	})
+
+	// Convert the Room object to JSON
+	jsonRoom, err := json.Marshal(room)
+	if err != nil {
+		panic(err)
+	}
+
+	// Set the key-value pair with a 1-hour expiration
+	err = client.Set(ID, jsonRoom, 60*60*time.Second).Err()
+	if err != nil {
+		panic(err)
+	}
+
+	return room
+}
+
+func Vote(ID string, LocationName string) structs.Room {
+
+	var room structs.Room = Join(ID)
+
+	for i, option := range room.Options {
+		if option.Name == LocationName {
+			room.Options[i].Votes++
+		}
+	}
+
+	room = Update(ID, room)
+
+	return room
 }
