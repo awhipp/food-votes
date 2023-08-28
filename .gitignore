@@ -1,2 +1,3 @@
-backend/deploy/**
+backend/bootstrap
+backend/deploy.zip
 backend/.env

@@ -3,13 +3,13 @@ $env:GOOS = "linux"
 $env:GOARCH = "amd64"
 $env:CGO_ENABLED = "0"
 $env:URL = "FUNCTION URL"
-go build -o .\deploy\main .\main.go
+go build -tags lambda.norpc -o bootstrap .\main.go
 
 ## Compress
-Compress-Archive -Path .\deploy\main -DestinationPath .\deploy\main.zip -Force
+Compress-Archive -Path bootstrap -DestinationPath deploy.zip -Force
 
 ## Deploy
-aws lambda update-function-code --function-name food-votes --zip-file fileb://deploy/main.zip --query 'LastModified' --output text
+aws lambda update-function-code --function-name food-votes --zip-file fileb://deploy.zip --query 'LastModified' --output text
 
 ## Wait 10 seconds
 Start-Sleep -s 10
